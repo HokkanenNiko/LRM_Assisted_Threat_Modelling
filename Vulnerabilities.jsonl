@@ -1,0 +1,191 @@
+
+{
+"ID": "V1",
+"VULNERABILITY": "Communication channels not adequately protected",
+"DESCRIPTION": "Channels (carrying classified/sensitive corporate data) not subject to security procedures (encryption devices) or not physically inaccessible (e.g. connections with accessible data cables, to which interception tools can be connected)"
+}
+{
+"ID": "V2",
+"VULNERABILITY": "Uncontrolled changes to the operating system",
+"DESCRIPTION": "Possible unauthorized/controlled insertion by technical personnel of procedures/functions within the operating system that disable or damage security procedures"
+}
+{
+"ID": "V3",
+"VULNERABILITY": "Uncontrolled changes to the application software",
+"DESCRIPTION": "Possible changes to procedures and application programs not documented by system administrators/programmers"
+}
+{
+"ID": "V4",
+"VULNERABILITY": "Failure to periodically check the procedures installed on the system",
+"DESCRIPTION": "Operation to be implemented in order to identify programs/procedures not foreseen by the system project, inserted subsequently without authorization"
+}
+{
+"ID": "V5",
+"VULNERABILITY": "Exploiting operating system \"holes",
+"DESCRIPTION": "Exploitation, for illicit purposes, of operating system \"bugs"
+}
+{
+"ID": "V6",
+"VULNERABILITY": "Insufficient error detection",
+"DESCRIPTION": "System errors (which could affect the security features of the system) not evaluated or underestimated in their importance"
+}
+{
+"ID": "V7",
+"VULNERABILITY": "Untested software applications",
+"DESCRIPTION": "Use of programs that are not adequately tested and certified"
+}
+{
+"ID": "V8",
+"VULNERABILITY": "Inadequate logical access control",
+"DESCRIPTION": "The system/network does not provide valid user accounting procedures, thus allowing data theft, damage and modification"
+}
+{
+"ID": "V9",
+"VULNERABILITY": "Non-existent logical access procedures",
+"DESCRIPTION": "The system is open to logical access by anyone, it does not provide any type of protection"
+}
+{
+"ID": "V10",
+"VULNERABILITY": "Incorrect input/output procedures",
+"DESCRIPTION": "System errors related to I/O operations that can lead to data loss"
+}
+{
+"ID": "V11",
+"VULNERABILITY": "Errors in programs",
+"DESCRIPTION": "Unintentional application malfunctions that may compromise information security"
+}
+{
+"ID": "V12",
+"VULNERABILITY": "Untested emergency procedures",
+"DESCRIPTION": "Procedures to be implemented in case of emergency, not sufficiently tested and which may lead to loss of information and its confidentiality"
+}
+{
+"ID": "V13",
+"VULNERABILITY": "Lack of emergency procedures",
+"DESCRIPTION": "Lack of security procedures regarding: saving, destroying information, backing up on different media, closing of the premises containing the system and/or data"
+}
+{
+"ID": "V14",
+"VULNERABILITY": "Inadequate supervision",
+"DESCRIPTION": "Insufficient control of users and their access to the system"
+}
+{
+"ID": "V15",
+"VULNERABILITY": "Ignorance of safety procedures",
+"DESCRIPTION": "The staff is not aware of the security procedures and regulations and acts in a way that could compromise security (e.g. giving their password to a colleague)"
+}
+{
+"ID": "V16",
+"VULNERABILITY": "Untrained staff",
+"DESCRIPTION": "Incorrect use of applications (which handle classified data) by inadequately trained personnel, resulting in the deletion/modification/insertion of sensitive data and information"
+}
+{
+"ID": "V17",
+"VULNERABILITY": "Misuse of information by end users",
+"DESCRIPTION": "Disclosure, alteration, destruction of information for unlawful purposes"
+}
+{
+"ID": "V18",
+"VULNERABILITY": "Improper manipulation of mass storage devices",
+"DESCRIPTION": "Improper handling of magnetic/optical media containing system data/software, which may lead to loss/modification of stored data"
+}
+{
+"ID": "V19",
+"VULNERABILITY": "Changing system hardware configuration",
+"DESCRIPTION": "Modification of hardware devices (addition, modification, deletion) which must be subject to periodic inventory and control"
+}
+{
+"ID": "V20",
+"VULNERABILITY": "Lack of software to control hardware configurations",
+"DESCRIPTION": "Lack of software that regularly checks the presence and functioning of the hardware devices that make up the system"
+}
+{
+"ID": "V21",
+"VULNERABILITY": "Insufficient separation of logical work areas",
+"DESCRIPTION": "The operating system does not provide secure separation systems for the separation between logical work areas"
+}
+{
+"ID": "V22",
+"VULNERABILITY": "Changing system software configuration",
+"DESCRIPTION": "Modification of programs and procedures (modification, deletion) which must be subject to updating, periodic control of installation of updates)"
+}
+{
+"ID": "V23",
+"VULNERABILITY": "Unauthorized software applications",
+"DESCRIPTION": "Presence on the system of unforeseen/authorized programs that can perform actions that are harmful to security (e.g. programs installed by users without authorization)"
+}
+{
+"ID": "V24",
+"VULNERABILITY": "Abandoned waste material",
+"DESCRIPTION": "Abandoned sheets, tables, magnetic media that can be used to obtain useful information to gain access to a system"
+}
+{
+"ID": "V25",
+"VULNERABILITY": "Insufficient information surveillance",
+"DESCRIPTION": "Unmonitored data, available on video, on printouts, on magnetic media, accessible by unauthorized personnel"
+}
+{
+"ID": "V26",
+"VULNERABILITY": "Inadequate fire protection",
+"DESCRIPTION": "Lack of a specific fire protection system to safeguard the system and the data contained within it (e.g. fireproof safes and automatic shutdown system)"
+}
+{
+"ID": "V27",
+"VULNERABILITY": "Inadequate flood protection",
+"DESCRIPTION": "Lack of a specific anti-flooding system to safeguard the system and the data contained within it (e.g. watertight bulkheads)"
+}
+{
+"ID": "V28",
+"VULNERABILITY": "Inadequate high temperature protection",
+"DESCRIPTION": "Inadequate temperature monitoring and cooling of electronic devices"
+}
+{
+"ID": "V29",
+"VULNERABILITY": "Unstable power supply",
+"DESCRIPTION": "Lack of adequate automatic control systems for stabilization and continuity on UPS systems"
+}
+{
+"ID": "V30",
+"VULNERABILITY": "Electromagnetic emanations",
+"DESCRIPTION": "Equipment not adequately protected from compromising electromagnetic emissions."
+}
+{
+"ID": "V31",
+"VULNERABILITY": "Hardware devices that are not physically locked",
+"DESCRIPTION": "Lack of security systems that prevent the removal of peripherals (hard drives, cards, tapes)"
+}
+{
+"ID": "V32",
+"VULNERABILITY": "Inadequate access control to the CED area",
+"DESCRIPTION": "The control of staff and visitors is not rigorous"
+}
+{
+"ID": "V33",
+"VULNERABILITY": "Lack of access control to the CED area",
+"DESCRIPTION": "There is no targeted control (personal, electronic, physical)"
+}
+{
+"ID": "V34",
+"VULNERABILITY": "System not protected from lightning",
+"DESCRIPTION": "There are no lightning rods in the infrastructure"
+}
+{
+"ID": "V35",
+"VULNERABILITY": "System not protected from electrostatic charges",
+"DESCRIPTION": "The system is not protected from electrical charges by means of earthing arresters."
+}
+{
+"ID": "V36",
+"VULNERABILITY": "No control over system clock",
+"DESCRIPTION": "It is not possible to prevent access to the system clock through the use of unauthorized procedures."
+}
+{
+"ID": "V37",
+"VULNERABILITY": "Hardware device malfunction",
+"DESCRIPTION": "A peripheral or device, following a malfunction or failure, compromises the security of the system, allowing access to unauthorized individuals"
+}
+{
+"ID": "V38",
+"VULNERABILITY": "System not protected from explosions",
+"DESCRIPTION": "The data center area containing the company's sensitive/classified information is not adequately protected from explosions"
+}
