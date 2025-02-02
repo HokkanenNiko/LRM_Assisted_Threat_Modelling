@@ -1,6 +1,7 @@
 import ollama_api_wrapper
-#import vector_search
+import vector_search
 import os
+import pandas as pd
 
 def prompt_model(prompt_text, system_prompt):
     apiWrapper = ollama_api_wrapper.OllamaAPIWrapper(base_url='http://localhost:11434')
@@ -18,7 +19,56 @@ def prompt_model(prompt_text, system_prompt):
     response = apiWrapper.post('api/generate', payload)
     return response['response']
 
-def fetch_context(context, query):
+def csv_to_chunked_json(csv_file_path: str, output_json_path: str, id_col: str, name_col: str, desc_col: str):
+    """
+    Converts a CSV file to a JSON file with chunked text format.
+    
+    :param csv_file_path: Path to the input CSV file.
+    :param output_json_path: Path to the output JSON file.
+    :param id_col: Column name for the unique identifier.
+    :param name_col: Column name for the item name.
+    :param desc_col: Column name for the description.
+    """
+    try:
+        df = pd.read_csv(csv_file_path, delimiter=';', encoding='utf-8')
+        
+        # Generate chunked text format
+        df["chunk"] = df.apply(
+            lambda row: f"{id_col}: {row[id_col]}\n{name_col}: {row[name_col]}\n{desc_col}: {row[desc_col]}", axis=1
+        )
+        
+        # Convert to JSON and save
+        df[[id_col, "chunk"]].to_json(output_json_path, orient="records", indent=4, force_ascii=False)
+        
+        print(f"Successfully created chunked JSON file at {output_json_path}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+def csv_to_chunked_list(csv_file_path: str, id_col: str, name_col: str, desc_col: str) -> list[str]:
+    """
+    Converts a CSV file to a list of chunked text format.
+    
+    :param csv_file_path: Path to the input CSV file.
+    :param id_col: Column name for the unique identifier.
+    :param name_col: Column name for the item name.
+    :param desc_col: Column name for the description.
+    :return: List of chunked text strings.
+    """
+    try:
+        # Load the dataset (detect delimiter automatically)
+        df = pd.read_csv(csv_file_path, delimiter=';', encoding='utf-8')
+        
+        # Generate chunked text format
+        chunks = df.apply(
+            lambda row: f"{id_col}: {row[id_col]}\n{name_col}: {row[name_col]}\n{desc_col}: {row[desc_col]}", axis=1
+        ).tolist()
+        
+        return chunks
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
+    
+def fetch_context(context, query: str):
     results = context.search(query, top_k=5)
     return "\n\n---\n\n".join(result['text'] for result in results)
 
@@ -33,11 +83,10 @@ def read_context_document(file_path):
 
 
 def initialize_vector_database(context):
-    print("test")
-    #return vector_search.initialize_vector_database(context)
+    return vector_search.initialize_vector_database(context)
 
 def format_prompt_text(context, user_query):
-    return "Context based on semantic search:\n\n({})\n\nend of context\n\nstart of query:({})\n\nend of query".format(context, user_query)
+    return "Context based on semantic search:\n\n({})\n\nend of context\n\nstart of risk scenario:({})\n\nend of risk scenario".format(context, user_query)
 
 system_message='''You are an assistant in security risk analysis.
       You need to determine if the current user message contains a security threat.
@@ -114,12 +163,16 @@ system_message_reformat='''You are an assistant in security risk analysis.
       \"RiskType\": \"[Reale/Potenziale]\"
       },'''
 
-def initialize_rag():
-    context_source_texts = [read_context_document(file_name) for file_name in ["Threats.jsonl", "Vulnerabilities.jsonl"]]
-    context_source_text = "\n\n".join(context_source_texts)
-    vector_db = initialize_vector_database(context_source_text)
-    context = fetch_context(vector_db, prompt_text)
-    prompt_text = format_prompt_text(context, prompt_text)
+def initialize_rag_and_fetch_context(risk_scenario):
+    threat_chunks = csv_to_chunked_list("Threats.csv", "THREAT ID", "THREAT", "DESCRIPTION")
+    vulnerability_chunks = csv_to_chunked_list("Vulnerabilities.csv", "ID", "VULNERABILITY", "DESCRIPTION")
+
+    vector_db = vector_search.initialize_vector_database_with_chunks(threat_chunks)
+    vector_db = vector_search.add_to_vector_database(vector_db, vulnerability_chunks)
+
+    context = fetch_context(vector_db, risk_scenario)
+    prompt_text = format_prompt_text(context, risk_scenario)
+    return prompt_text
 
 def print_response(context, result):
     if context:
@@ -135,12 +188,12 @@ if __name__ == "__main__":
     risk_scenario = "The combinations of the safety cabinets are written on them in case you forget them."
     context = ""
 
-    use_rag = False
-    use_files_in_context = True
+    use_rag = True
+    use_files_in_context = False
     
     if(use_rag):
         system_prompt = system_message_rag_custom
-        initialize_rag()
+        risk_scenario = initialize_rag_and_fetch_context(risk_scenario)
     elif(use_files_in_context):
         threats_content = read_file_contents("Threats.csv")
         vulnerabilities_content = read_file_contents("Vulnerabilities.csv")

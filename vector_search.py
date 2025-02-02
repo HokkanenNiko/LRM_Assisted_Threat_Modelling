@@ -4,6 +4,18 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 
+def initialize_vector_database_with_chunks(chunks):
+    vector_search = XMLVectorSearch()
+
+    print(f"Adding {len(chunks)} chunks to the vector database...")
+    vector_search.add_to_index(chunks)
+    return vector_search
+
+def add_to_vector_database(vector_search, chunks):
+    print(f"Adding {len(chunks)} chunks to the vector database...")
+    vector_search.add_to_index(chunks)
+    return vector_search
+
 def initialize_vector_database(context):
     vector_search = XMLVectorSearch()
 
