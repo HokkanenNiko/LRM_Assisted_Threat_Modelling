@@ -1,0 +1,195 @@
+S1: The processing center is located in the basement. A sewer system runs under the building. The walls of the room that houses the processing center are not reinforced.
+S2: Confidential documents are stored in an archive constantly protected by armed guards, with three levels of biometric protection. The room that houses the archive is reinforced and burglar-proof.
+S3: The connection between the data center and the offices is made of fiber optics.
+S4: The connection between the CED and the offices is made of optical fiber. The cable is laid inside protected and dedicated channels. Communication on the channel is protected by ciphers approved at the highest classification level compared to that of the transmitted data.
+S5: The system is installed on the third floor of a building without any special security controls
+S6: There are no fire protection systems installed on the site
+S7: A fire protection system with smoke detector and temperature control system is installed on the site
+S8: The site is equipped with a fire protection system based on Halon 1301 gas with smoke detector and a temperature control system based on a redundant air conditioner with humidity sensors. In addition, the system is connected to the nearest Fire Brigade station which is automatically contacted in the event of an alarm.
+S9: A password is required to access the system
+S10: Anyone can access the system
+S11: Only those who have a password can access the system. The password must meet complexity requirements, is stored in a historical database and must be changed once every 90 days. The password is shared among members of the same office
+S12: Only those who have a password can access the system. The password must meet complexity requirements, is stored in a historical database and must be changed once every 90 days. The access credentials are nominative and it is forbidden to reveal them to third parties
+S13: The system is installed in the highest-ranked operating mode, and all users can access all documents, regardless of their security clearance, role and need-to-know.
+S14: The system is installed in the highest-ranking operating mode, and only authorized users can access documents.
+S15: The system is installed in the highest-ranking operating mode, and only authorized users can access documents based on their security clearance level and need-to-know.
+S16: No system logs are recorded
+S17: System logs are recorded. They are retained for at least five years, backed up periodically (at least once a year), and the following events are recorded: successful/denied system access, security policy changes, print jobs performed/stopped/failed, user creation/modification/addition, security group creation/modification/addition
+S18: System logs are recorded
+S19: There are no emergency plans
+S20: There are emergency plans
+S21: There are contingency plans that are periodically tested and evaluated to update them if necessary.
+S22: There is no written procedure
+S23: There are written procedures
+S24: All procedures relating to the use and maintenance of the system and safety measures are reported in writing, appropriately labeled and registered, stored in the appropriate safety containers and are made available to authorized personnel. These procedures are also updated where necessary
+S25: Staff is not trained
+S26: Staff is trained
+S27: There is a plan for training and periodic updating of personnel on security threats and the correct behavior to adopt in various circumstances in the event of security incidents. Furthermore, checks are carried out on the effectiveness of the training
+S28: The data is all contained in the same directory
+S29: The data is separated
+S30: The data is separated according to its classification level and work program. Each directory (and the files it contains) is associated with one or more users or work groups according to the mandatory access control, and can only be accessed by the corresponding users.
+S31: There is no log of changes made to the system
+S32: There is a log of changes made to the system
+S33: There is a log of the changes made to the system that reports: the date of the change, the reason, who made the change, who authorised the change, what was changed, signature of who made the change and who authorised the change
+S34: There is no register for access to restricted areas
+S35: There is a register for access to restricted areas
+S36: There is a log for access to restricted areas which reports: date and time of access, name of the person accessing, reason for access, who authorised access, date and time of exit, signature of the person accessing and of the person authorised access
+S37: The computers are installed in "open space" offices also open to the public
+S38: The computers are installed in locked offices
+S39: The computers are installed in offices that are only accessible to personnel authorized to access the system, with the monitors not facing the door or windows.
+S40: No data backups are made
+S41: Periodic data backups are performed
+S42: Periodic data backups are performed on a daily basis, in incremental mode, with rotation of the storage memories and relative conservation in special fireproof security containers and suitable for the highest classification level of the data contained therein. There are two copies of each backup, one of which is stored on site and the other at a secondary site, also approved at the same level as the main one and with the same conservation methods
+S43: Anyone can connect any external drive to the system or their work computer
+S44: Is there any control over external drives connected to the system or your work computer?
+S45: You can connect to the system or to your work computer only and exclusively external drives, appropriately labelled and stored in specific security containers based on the highest classification level of the data contained in them, listed in the specific register of authorised media.
+S46: There are no lightning protection measures
+S47: There are measures to protect against lightning
+S48: There are lightning protection measures such as: earthing, lightning rods, shielded and filtered electrical panels
+S49: Computers handle highly classified data but no TEMPEST protection measures are in place
+S50: The computers handle highly classified data and TEMPEST protection measures are in place
+S51: The computers process high-level classified data and TEMPEST protection measures are adopted in accordance with the results of the TEMPEST Zoning carried out
+S52: There are no flood protection measures in place
+S53: Sensors have been installed under the raised floor of the CED, with humidity detectors. The water system can be blocked both automatically and, as an alternative measure, manually. There are no pipes in the walls of the CED room and it was built far from the bathrooms. Finally, the CED is located on the first floor of the building
+S54: Printed sheets are left unattended on the desk
+S55: All printed documents are closed inside specific security containers, based on the highest classification level of the information contained therein, when not directly consulted by authorized personnel.
+S56: Anyone can access the CED, without checks
+S57: To access the CED, you must be previously authorised. Access is via an electronically locked door that must be unlocked using your personal badge and the relevant access PIN.
+S58: There are no rules or procedures regarding copying digital media and prints.
+S59: It is forbidden to make copies of digital media and printed documents
+S60: Visitors are not accompanied when authorized
+S61: Visitors must be authorized in advance to access and are accompanied, during their entire stay in the facility, by the designated personnel. During their stay, they will not be able to access classified information, unless it is provided for by a specific contract and, in this case, they will only be able to access information at the classification level for which they are authorized and for which they have a need to know.
+S62: Server systems are placed on a table
+S63: Server systems are installed inside special racks and locked onto special containment supports. Furthermore, the racks are anchored to the ground
+S64: Any software can be installed on the system
+S65: Only the software authorized by the Security Manager may be installed on the system by the System Administrator only, after an appropriate security assessment has been carried out. Said software is also reported in the system configuration change log.
+S66: There are no specific procedures for controlling the development of new software created directly by the company
+S67: All software produced internally by the company must comply with precise procedures relating to the tools and best security practices to be used for writing, checking, reviewing and testing the produced code.
+S68: The system is put into operation and used as is, without any prior or subsequent checks.
+S69: Before being put into operation, the system is checked and evaluated through vulnerability assessment and penetration testing tools. This activity is repeated on a periodic basis (at least once a year)
+S70: No security patches released by the manufacturer are ever applied to the system
+S71: The system is continuously updated, applying the security patches released by the manufacturer, after a formal check of its functioning has been carried out. Each change is noted in the system configuration change log
+S72: There are no antivirus programs installed on the system
+S73: A program for detecting computer viruses and malware is installed on the system, which is updated at least weekly, capable of recognizing the viral strain and the type of infection, proceeding to quarantine or delete the infected files.
+S74: The system is not equipped with UPS
+S75: The system is protected from power failures and surges by a UPS with voltage stabilizing function, with the ability to send a command to the servers connected to it to safely shut them down once a residual battery capacity of 30% has been reached.
+S76: Data is saved on the system on a single disk
+S77: The system disks on which the data is saved are configured in RAID 6 mode with an additional spare disk, in order to guarantee data availability even in the event of failure of 3 disks.
+S78: The staff are not given any specific instructions and are left to deal with their own complaints.
+S79: Staff are motivated to follow company policy and there is particular attention to maintaining a peaceful and safety-oriented work environment.
+S80: There are no detection systems against night-time or unauthorized intrusions
+S81: An alarm system is installed with dual technology sensors with infrared detection and heat and motion sensitive cameras. In the event of an alarm, the control panel contacts both the Security Manager and the nearest Carabinieri Station by telephone.
+S82: The CED is installed inside a room with plasterboard walls, closed with a normal wooden door
+S83: The CED is installed in a room with certified earthquake-proof walls and capable of withstanding medium-sized explosions. This room is closed with a triple-combination armored door
+S84: The office windows are of the normal type, with transparent glass.
+S85: The office windows are of the normal type, with transparent glass.
+S85: The office windows are shatterproof and are darkened by applying a special tear-proof film on the inside so as not to allow the inside of the rooms to be seen from the outside.
+S86: Users are allowed to leave their workstations without having to take any special precautions.
+S87: Staff are trained to ensure that, if they need to leave their workstation, they place work documents and digital media in the appropriate security containers and ensure that they lock their computer by logging out of their account.
+S88: The waste material is sent directly to the landfill, without any control
+S89: Before being thrown away, printed documents are passed through a shredder corresponding to the category of the classification level of the information to be destroyed, while digital media are first overwritten 35 times and then demagnetized, finally mechanically destroyed.
+S90: Eating/drinking is permitted near the servers and terminals
+S91: Eating/drinking near servers and terminals is prohibited
+S92: No maintenance is carried out on the premises and systems
+S93: Regular inspections of the electrical distribution system and cables located under the raised floor, as well as the water system with maintenance against any leaks. Regular maintenance is also carried out on the air conditioning system, with replacement of refrigerants, and cleaning of air vents. Finally, regular inspections are carried out to identify possible fire risks.
+S94: Only available personnel are employed
+S95: The continuous availability of technical and support staff is arranged, with rotation and, where necessary, 24-hour supervision for critical systems.
+S96: There are no special procedures during the processing of sensitive data
+S97: Specific procedures have been put in place to safely carry out the processing of sensitive data.
+S98: Cabinets and desks remain open even after working hours and non-essential systems are left on when unattended
+S99: Cabinets and desks are locked after working hours and non-essential systems are turned off when unattended
+S100: Emergency procedures exist but they are known only to managers
+S101: There is an emergency procedures manual that is provided to all personnel and summary tables of emergency procedures have been placed (including emergency telephone numbers and those of management staff to contact)
+S102: Users can also use passwords made up of identical characters or numbers to access the system, and it is also possible to use empty passwords or passwords of the type "password" or "admin"
+S103: Users must use passwords of at least 12 characters to access the system, which must contain at least one number, one special character and one capital letter. Furthermore, it is not possible to enter more than two consecutive identical numbers or letters and it is not possible to enter empty passwords or passwords vulnerable to dictionary-based attacks
+S104: To access the system, users can continue to enter their password until they are granted access.
+S105: If a user enters the wrong credentials more than three times, the related account will be blocked and the System Administrator will have to be asked to unblock it.
+S106: The user can continue to use the password provided to him for the first access to the system
+S107: The system forces the user to change the password received from the System Administrator at the first login
+S108: Only authorized users can open the cabinets containing classified documents and no tracking is required.
+S109: Only authorized users can open the cabinets containing classified documents and it is mandatory to report, on the appropriate sheet on the outside of the cabinet, who opened it, on what date and at what time with a signature. The same registration occurs for the closing of the cabinet
+S110: Computers and servers are delivered to the equipment maintenance technicians for repair with the mass storage media inserted.
+S111: Before handing over a computer or server to the equipment maintenance technicians, all the mass storage devices installed in them are removed and stored in the appropriate security containers based on the maximum classification level of the data saved on them.
+S112: The printers dedicated to printing classified documents are positioned in the corridors to reduce the generation of dust inside the data processing center and the offices containing the IT equipment. These corridors are located outside the restricted areas
+S113: In the corridors of the reserved area, printers dedicated to printing classified documents have been installed, in order to reduce the generation of dust inside the data processing center and the offices containing the IT equipment.
+S114: Classified documents are produced without specifying the classification level of the information they contain for security reasons.
+S115: All classified documents are labeled with the classification level of the data they contain.
+S116: There are several locations where classified data is processed but only the main one has been approved
+S117: All locations where the processing of classified data is carried out have been approved in accordance with the maximum classification level of the data itself.
+S118: There are several locations where classified data is processed but only the main one has a security organization
+S119: All locations where classified data is processed have a security organization, with remote location managers reporting to the head office manager.
+S120: In case of emergency, the staff immediately abandons their positions and leaves the documents where they are to get to safety as soon as possible.
+S121: In case of emergency, within the limits of personal safety, users must block access to the PC and must lock the documents in their respective cabinets or security containers or take out as many as possible, monitoring them and delivering them to the Security Manager who will carry out the reporting and move them to another suitable location of the company or deliver them to the nearest Carabinieri Station.
+S122: The headquarters is protected by a video surveillance system
+S123: There are armed guards present
+S124: The external perimeter is protected by a net
+S125: There is a fire prevention system
+S126: There is an access control system
+S127: Are there any procedures for installing new hardware/software?
+S128: Classified documents are kept
+S129: There are emergency procedures
+S130: Authorized visitors can, in principle, access restricted areas
+S131: Authorized technicians may be given the equipment used for processing classified data
+S132: The doors of the reserved areas are closed in the absence of staff but the cabinets are left open
+S133: A periodic check is carried out, with unpredictable timing, to verify the closure of all cabinets and safes containing classified material and of the access doors to restricted areas
+S134: The keys to the reserved areas are given to those who need them, without having to verify their authorization.
+S135: The keys to the reserved areas can only be delivered to those who are authorised and after completing the appropriate register required by current legislation.
+S136: The combinations of the safety cabinets are written on them in case you forget them.
+S137: The System Administrator's access password is inserted in a sealed envelope and signed by the Security Officer and is kept inside a security safe, appropriate to the classification level of the information contained in the system to which it refers, inside a reserved area. A second copy is kept in a similar safe inside another reserved area
+S138: If the envelope containing the System Administrator password is opened, the password remains the same and is only changed when decided by the person who used it.
+S139: All external accesses to the reserved areas are controlled by a video surveillance system with cables that are contained in special TEMPEST channels with anti-burglary measures. The images taken are recorded and stored for at least two years and treated in compliance with current legislation
+S140: The internal and external lighting of the reserved areas is turned off in the event of absence of personnel to promote energy saving
+S141: All accesses to the air conditioning system pipes are closed by a resistant anti-throw net and with an alarmed sensor against unauthorised opening and removal and are of such a size as to prevent the passage of humans or animals.
+S142: Only personnel authorized to handle classified information may access the Restricted Areas where such information is handled and/or stored.
+S143: The Restricted Areas are protected by appropriate security measures (such as, for example, armoured doors, anti-intrusion alarm systems, safes and security containers for the storage of classified information)
+S144: Authorized personnel accessing the Reserved Areas are recorded in special registers
+S145: Authorized personnel who are granted access to classified information are recorded in special registers and are prohibited from taking such information outside the Restricted Areas.
+S146: Authorized personnel are periodically screened to ensure they still need to access classified information.
+S147: All authorised personnel are periodically trained in safety and a high level of attention is paid to safety issues.
+S148: Inside the Reserved Areas there are no devices for reproducing paper documents and the prints produced by the PC used for the maximum level CONFIDENTIAL information are controlled
+S149: It is forbidden to introduce electronic devices such as memory media into the Reserved Areas unless previously authorised and registered, while the introduction of other devices such as voice recorders, cameras, video cameras, smartphones, tablets and PCs is always forbidden.
+S150: The company headquarters is adjacent to other industrial plants, separated from them by fences and with the walls of the building surrounded by parking areas for employees' cars on all sides, with a closed entrance gate (it is opened only during office hours for the time strictly necessary for the entry/exit of vehicles and personnel on foot) and a video surveillance system.
+S151: The plant is manned during opening hours, with surveillance and control service entrusted to the company's internal staff. During the company's hours and days of closure, surveillance is ensured by an external Surveillance Company with which the company is connected by a direct tele-radio system, which comes into operation when the alarm system detects a possible intrusion. The system is equipped with a device with a telephone dialer connected to the control panel of the aforementioned Surveillance Company, to the Security Officer and to the Law Enforcement, and makes a series of cascade calls
+S152: At the end of an event that requires the implementation of emergency procedures, the Security Officer will carry out an inspection and draw up an inventory of all the material and documentation, stored in the Restricted Areas, to ensure that nothing has been lost and/or compromised.
+S153: At the end of an event that requires the implementation of emergency procedures, the Security Officer orders the immediate resumption of activities, without verifying the consistency of the classified material
+S154: The company headquarters is adjacent to other industrial plants, separated from them by fences, which in some places are interrupted due to landslides, and with the walls of the building surrounded by parking areas for employees' cars on all sides, with an entrance gate that is normally open and not controlled during working hours.
+S155: It is the responsibility of the Security Officer (and those designated) to ensure that all security procedures are applied, which are described for this purpose in the "Internal Security Regulations" of each location, where the security measures adopted are indicated in detail.
+S156: It is up to the sensitivity of the staff to ensure compliance with the application of safety procedures, which are described for this purpose in the "Internal Safety Regulations" of each location, where the safety measures adopted are indicated in detail.
+S157: Self-inspections are carried out annually by the Headquarters Security Officer assisted by the CIS Security Officer and the COMSEC Security Officer, in order to check the maintenance and observance of the security regulations and procedures in force.
+S158: Inspections are carried out annually by external personnel in order to check the maintenance and observance of the safety regulations and procedures in force.
+S159: Users do not have access to configuration/administration procedures and management tools
+S160: Users have access to configuration/administration procedures and management tools
+S161: The data relating to "user authentication" are protected in accordance with current security regulations
+S162: The data relating to “user authentication” are available to anyone who requests them.
+S163: The CIS System services are managed based on user access rights, identification and assignment of access rights are managed by the System Administrator
+S164: The CIS System services are managed based on user access rights, identification and assignment of access rights are managed directly by the system users.
+S165: The analysis of audit data will be possible only by the CIS Security Officer and his security staff.
+S166: Audit data analysis is available to all users
+S167: The access and exit of employees and visitors to the CIS System are stored in special electronic registers, reporting the information required by current legislation and the Internal CIS Security Regulations. In particular, the following information is recorded: - Start-up and shutdown of the operating system; - Log-on, with or without success; - Log-off of each user from the workstation; - Creation/modification of users and user groups; - Modification of user and group privileges and permissions; - Modifications to the system security settings (including audit functions); - Access to data relating to system security; - Creation, modification or deletion of audit files; - Change of system time and date; - Failed attempts to access system resources. The data is retained for a period of not less than two years
+S168: The access and exit of employees and visitors to the CIS System are stored in special electronic registers, reporting the information required by current legislation and the Internal CIS Security Regulations. In particular, the following information is recorded: - Start-up and shutdown of the operating system; - Log-on, with or without success; - Log-off of each user from the workstation; - Creation/modification of users and user groups; - Modification of user and group privileges and permissions; - Modifications to system security settings (including audit functions); - Access to data relating to system security; - Creation, modification or deletion of audit files; - Change of system time and date; - Failed attempts to access system resources. The data is overwritten monthly and is not retained
+S169: At least once every six months, the consistency of the users registered in the CIS System with those actually authorised and necessary is verified. During this check, it is also verified that the hardware and software configuration of the CIS System corresponds to that approved and that there are no events, deducible from the system logs, that could indicate the emergence of any problems or risks to security. In general: - The CIS Security Officer at the headquarters carries out a periodic check on the accounting records, in particular those relating to unauthorised attempts to gain access to the CIS System or its resources; - The CIS Security Officer at the headquarters carries out periodic checks both to verify the integrity of the mass storage media and the correct configuration and connection of the devices and equipment of the CIS System; - The System Administrator periodically carries out checks on the System HW to verify the integrity of the components. The auditing services, in particular: - allow the analysis of the online records relating to the previous month; - allow the analysis of the records provided by accounting relating to the previous two years. The data to be displayed when a previously defined alarm occurs or during audit analysis are: - User identification/authentication; - Identity of the workstation from which access is made; - Date and time of the event; - Type of event and its outcome
+S170: At least once every six months, the consistency of the users registered in the CIS System with those actually authorised and necessary is verified. During this check, only formal checks are carried out based on the registered documentation
+S171: At least once every six months the consistency of the users registered in the CIS System is verified
+S172: All storage media are properly protected to prevent disclosure of information during maintenance work on the CIS System workstations.
+S173: All storage media are properly protected to prevent disclosure of information during maintenance work on the CIS System workstations with at-rest encryption based on certified algorithms.
+S174: The storage media do not have any special protections that prevent the disclosure of information during maintenance work on the CIS System workstations.
+S175: The System Administrator is informed of any malfunction of all the HW components of the System (PC, server, switch, etc.)
+S176: In case of any malfunction of all the HW components of the System (PC, server, switch, etc.) users contact the company in charge of maintenance directly without informing anyone else.
+S177: The IT system is in primary PC/secondary PC architecture and is composed of two “All in One” type computers, completed by a connection switch between the two stations and between these and a multifunction printer. All the devices are TEMPEST Class B certified
+S178: The IT system is in primary PC/secondary PC architecture and is composed of two “All in One” type computers, completed by a connection switch between the two stations and between these and a multifunction printer. Both the PC and the printer are TEMPEST Class B devices
+S179: Software updates concern only the antivirus, and are done online.
+S180: Software updates concern only the antivirus, and are performed offline.
+S181: Software updates concern both the operating system and the applications (for both only for critical and security components and not for new features) and the antivirus, and are carried out in offline mode.
+S182: The responsibility of the security organization is to verify that the CIS System maintains its security features over time, possibly adapting the system itself to new emerging threats and vulnerabilities, subject to approval of the changes by DIS-UCSe according to the National Certification Scheme
+S183: The security organization's responsibility is to verify that the CIS System maintains its functionality characteristics over time, regardless of the effectiveness of its security features.
+S184: All vehicles and people, entering and leaving the premises, are subject to checks by security personnel. Furthermore, security personnel have the legal authority to subject all people and vehicles circulating within the premises to checks.
+S185: There is freedom of access and exit from the premises by vehicles and people. Furthermore, people can oppose any requests for control both for themselves and for the vehicle used to access the premises
+S186: Since the maximum classification level of the information processed is CONFIDENTIAL, pursuant to the PCM-ANS Directive 5/2006 of 3 February 2006, containing Provisions on the Security of Systems for the Automatic Processing of Classified Data, in particular with regard to Annex C (“Documentation for small and medium-sized systems in local networks”) and Annex E (“Documentation for software development systems installed in reserved EAD areas”), and having regard to the Prime Ministerial Decree of 6 November 2015 no. 5, integrated with the amendments of the Prime Ministerial Decree of 2 October 2017 no. 3, which contains the “Provisions for the administrative protection of State secrets and classified information”, it is not necessary to adopt TEMPEST protection measures for the equipment and communication networks used in the CIS system in question.
+S187: The maximum classification level of the information processed is SECRET but it is not considered necessary to adopt TEMPEST protection measures for the equipment and communication networks used in the CIS system in question.
+S188: The communication channels between the servers and between these and the clients are protected via VPN, both for connections via LAN and via WAN, and the system that creates said VPN has been approved by the competent Authority for the processing of data up to the National CONFIDENTIAL level.
+S189: The communication channels between the servers and between them and the clients are protected via VPN generated by a third-party cloud service.
+S190: The server components of the CIS System are installed separately from servers of other systems, in special lockable racks, within a controlled area.
+S191: The server components of the CIS System are installed in the company's data processing center, together with the other data processing systems.
+S192: The management of the users is entrusted to the System Administrator only, under the supervision of the CIS Security Officer, and they are configured via a specific workstation directly connected to the CIS System.
+S193: The management of the utilities is entrusted to the staff of the parent company, who makes the necessary changes remotely by connecting from another country, communicating the list of added/modified/suspended and cancelled utilities to the CIS Security Officer on a monthly basis.
+nan: nan

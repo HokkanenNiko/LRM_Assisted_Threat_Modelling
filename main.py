@@ -2,12 +2,16 @@ import ollama_api_wrapper
 import vector_search
 import os
 import pandas as pd
+import time
+import datetime
+import file_operations
+import json
 
 def prompt_model(prompt_text, system_prompt):
     apiWrapper = ollama_api_wrapper.OllamaAPIWrapper(base_url='http://localhost:11434')
 
     payload = {
-        "model": "deepseek-r1:latest",
+        "model": 'marco-o1:latest',
         "stream": False,
         "system": system_prompt,
         "prompt": prompt_text,
@@ -72,16 +76,6 @@ def fetch_context(context, query: str):
     results = context.search(query, top_k=5)
     return "\n\n---\n\n".join(result['text'] for result in results)
 
-def read_context_document(file_path):
-    if not os.path.exists(file_path):
-        print(f"File not found: {file_path}")
-        exit(1)
-
-    with open(file_path, 'r', encoding='utf-8') as file:
-        context_text = file.read().strip()
-        return context_text
-
-
 def initialize_vector_database(context):
     return vector_search.initialize_vector_database(context)
 
@@ -94,19 +88,19 @@ system_message='''You are an assistant in security risk analysis.
       You must reply with \"more\"  in the \"Short\" field if you think additional details should be provided along with the vulnerability already discovered
       You must reply with \"no\"  in the \"Short\" field  if you think NO vulnerabilities are present
       You must reply with \"yes\"  in the \"Short\" field  if you think there is at least one vulnerability
-      You must NEVER HALLUCINATE
-
-      Always respond with an array of valid JSON output, for each vulnerability you find, create an item as the following and put into an array of json:
+      Always respond with an array of valid JSON output in the following format:
       {
-      \"Extended\": \"[Extended description]\",
+      \"Reasoning"\: \"[Extended reasoning]\",
       \"Short\":	 \"[Vulnerability Present: YES/NO/MORE]\",
       \"Details\": \"[Vulnerability Description]\",
       \"RiskID\":	\"[Risk ID]\",
       \"RiskDesc\": \"[Risk Description]\",
       \"VulnID\":	\"[Vulnerability ID]\",
       \"VulnDesc\": \"[Vulnerability Description]\",
-      \"RiskType\": \"[Reale/Potenziale]\"
-      },'''
+      \"RiskType\": \"[Real/Potential]\"
+      },
+      NOTE: YOU MUST NEVER INCLUDE MORE THAN ONE RISK OR VULNERABILITY IN A SINGLE JSON ITEM. EACH ITEM MUST BE A SINGLE VULNERABILITY AND RISK MAPPING. PRODUCE MULTIPLE JSON ITEMS IF YOU FIND MULTIPLE VULNERABILITIES!
+      '''
 
 system_message_rag='''You are an assistant in security risk analysis.
       You need to determine if the current user message contains a security threat.
@@ -127,9 +121,9 @@ system_message_rag_custom='''You are an assistant in security risk analysis.
       You must reply with \"no\"  in the \"Short\" field  if you think NO vulnerabilities are present
       You must reply with \"yes\"  in the \"Short\" field  if you think there is at least one vulnerability
       You must reply with \"no\" in the \"HelpfulContext\" field if you think the context is not helpful
-      You must NEVER HALLUCINATE
       Always respond with an array of valid JSON output, for each vulnerability you find, create an item as the following and put into an array of json:
       {
+      \"Reasoning"\: \"[Reasoning]\",
       \"Extended\": \"[Extended description]\",
       \"Short\":	 \"[Vulnerability Present: YES/NO/MORE]\",
       \"Details\": \"[Vulnerability Description]\",
@@ -174,33 +168,50 @@ def initialize_rag_and_fetch_context(risk_scenario):
     prompt_text = format_prompt_text(context, risk_scenario)
     return prompt_text
 
-def print_response(context, result):
-    if context:
-        print("context: " + context)
-    print("result: " + result)
-
-def read_file_contents(path):
-    with open(path, "r", encoding="utf-8") as file:
-        file_content = file.read()
-        return file_content
+def print_response(system_message:str, model_prompt:str, result:str):
+    response_data = {
+        "system_message": system_message,
+        "model_prompt": model_prompt,
+        "result": result
+    }
+    jsonl_line = json.dumps(response_data)
+    print(jsonl_line)
 
 if __name__ == "__main__":
-    risk_scenario = "The combinations of the safety cabinets are written on them in case you forget them."
-    context = ""
+    use_rag = False
+    use_files_in_context = True
+    process_scenarios = True
 
-    use_rag = True
-    use_files_in_context = False
-    
-    if(use_rag):
-        system_prompt = system_message_rag_custom
-        risk_scenario = initialize_rag_and_fetch_context(risk_scenario)
-    elif(use_files_in_context):
-        threats_content = read_file_contents("Threats.csv")
-        vulnerabilities_content = read_file_contents("Vulnerabilities.csv")
+    if(process_scenarios):
+        risk_scenarios = file_operations.get_unique_scenarios_from_csv("Inputs/Scenarios.csv")
+    else:
+        risk_scenario = "The CIS System services are managed based on user access rights, identification and assignment of access rights are managed directly by the system users."
+        risk_scenarios = [risk_scenario]
+
+    if(use_files_in_context):
+        threats_content = file_operations.read_file_contents("ContextInfo/Threats.csv")
+        vulnerabilities_content = file_operations.read_file_contents("ContextInfo/Vulnerabilities.csv")
         system_prompt = system_message + "\n\nUse the associated threats table for RiskIDs:\n" + threats_content + "\n\nUse the associated vulnerabilities table for VulnIDs:\n" + vulnerabilities_content
     else:
         system_prompt = system_message
-    
-    result = prompt_model(risk_scenario, system_prompt)
+        
+    output_file_path = f"Outputs/Results_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+    with open(output_file_path, "a", encoding="utf-8") as file:
+        jsonl_line = json.dumps({"system_prompt": system_prompt})
+        file.write(f"{jsonl_line}\n")
+    counter = 0 
+    for risk_scenario in risk_scenarios:
+        counter += 1
+        print(f"Processing scenario {counter}/{len(risk_scenarios)}")
+        if(use_rag):
+            system_prompt = system_message_rag_custom
+            risk_scenario = initialize_rag_and_fetch_context(risk_scenario)
 
-    print_response(context, result)
+        start_time = time.time()
+        result = prompt_model(risk_scenario, system_prompt)
+        elapsed_time = time.time() - start_time
+        print(f"Elapsed time for model prompt: {elapsed_time:.2f} seconds")
+        print_response("", risk_scenario, result)
+        with open(output_file_path, "a", encoding="utf-8") as file:
+            jsonl_line = json.dumps({"risk_scenario": risk_scenario, "result": result})
+            file.write(f"{jsonl_line}\n")
