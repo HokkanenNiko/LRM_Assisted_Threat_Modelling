@@ -39,6 +39,11 @@ def get_unique_scenarios_from_csv(csv_file_path: str) -> list[str]:
         print(f"Error: {e}")
         return []
 
+def read_file_lines(path):
+    with open(path, "r", encoding="utf-8") as file:
+        file_content = file.readlines()
+        return file_content
+
 def read_file_contents(path):
     with open(path, "r", encoding="utf-8") as file:
         file_content = file.read()

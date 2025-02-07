@@ -6,6 +6,7 @@ import time
 import datetime
 import file_operations
 import json
+import results_analyser
 
 def prompt_model(prompt_text, system_prompt):
     apiWrapper = ollama_api_wrapper.OllamaAPIWrapper(base_url='http://localhost:11434')
@@ -47,6 +48,20 @@ def csv_to_chunked_json(csv_file_path: str, output_json_path: str, id_col: str, 
         print(f"Successfully created chunked JSON file at {output_json_path}")
     except Exception as e:
         print(f"Error: {e}")
+
+def read_csv_file(file_path: str) -> list[dict]:
+    """
+    Reads a CSV file and returns its content as a list of dictionaries.
+    
+    :param file_path: Path to the CSV file.
+    :return: List of dictionaries containing the CSV data.
+    """
+    try:
+        df = pd.read_csv(file_path, delimiter=';', encoding='utf-8')
+        return df.to_dict(orient='records')
+    except Exception as e:
+        print(f"Error reading CSV file: {e}")
+        return []
 
 def csv_to_chunked_list(csv_file_path: str, id_col: str, name_col: str, desc_col: str) -> list[str]:
     """
@@ -100,18 +115,6 @@ system_message='''You are an assistant in security risk analysis.
       \"RiskType\": \"[Real/Potential]\"
       },
       NOTE: YOU MUST NEVER INCLUDE MORE THAN ONE RISK OR VULNERABILITY IN A SINGLE JSON ITEM. EACH ITEM MUST BE A SINGLE VULNERABILITY AND RISK MAPPING. PRODUCE MULTIPLE JSON ITEMS IF YOU FIND MULTIPLE VULNERABILITIES!
-      '''
-
-system_message_rag='''You are an assistant in security risk analysis.
-      You need to determine if the current user message contains a security threat.
-      If a security threat is present, please explain what the security threat is.
-      You must reply with \"more\" if you think additional details should be provided along with the vulnerability already discovered
-      You must reply with \"no\"  if you think NO vulnerabilities are present
-      You must reply with \"yes\"  if you think there is at least one vulnerability
-      You must NEVER HALLUCINATE
-      If you think "yes" or "more" You MUST list the identified vulnerability (vulnearbilità) and threat (minaccia) with the appropriate Identifiers refer to the document in your retrieval vectorstore
-      For the acronym  refer to the document in your retrieval vectorstore
-      Give all the information without asking the user more input
       '''
 
 system_message_rag_custom='''You are an assistant in security risk analysis.
@@ -168,6 +171,44 @@ def initialize_rag_and_fetch_context(risk_scenario):
     prompt_text = format_prompt_text(context, risk_scenario)
     return prompt_text
 
+def produce_accuracy_results(analysis_results_file_path:str, ground_truth_file_path:str):
+    lines = file_operations.read_file_lines(analysis_results_file_path)
+    lines_json = results_analyser.read_lines_to_json(lines)
+    extracted_data = results_analyser.extract_risk_data(lines_json)
+
+    results = []
+    ground_truths = read_csv_file(ground_truth_file_path)
+    ground_truths = [gt for gt in read_csv_file(ground_truth_file_path) if int(gt['Scenario ID'][1:]) >= 136]
+    for ground_truth in ground_truths:
+        scenario = ground_truth['Scenario ID']
+        llm_analyses = [item for item in extracted_data if item['RiskScenarioShort'] == scenario]
+        print(scenario)
+        for analysis in llm_analyses:
+            risk_ids = analysis['RiskID'].split(';')
+            risk_id = risk_ids[0] if risk_ids else analysis['RiskID']
+            vuln_ids = analysis['VulnID'].split(';')
+            vuln_id = vuln_ids[0] if vuln_ids else analysis['VulnID']
+
+            threat_match = risk_id == ground_truth['Assistant - Risk ID']
+            vulnerability_match = vuln_id == ground_truth['Assistant - Vulnerability ID']
+            full_match = threat_match and vulnerability_match
+            partial_match = threat_match or vulnerability_match
+            result = {
+                "scenario_id": scenario,
+                "threat_match": threat_match,
+                "vulnerability_match": vulnerability_match,
+                "full_match": full_match,
+                "partial_match": partial_match
+            }
+            results.append(result)
+            jsonl_line = json.dumps(result)
+            with open(f"Outputs/{os.path.splitext(os.path.basename(analysis_results_file_path))[0]}_results.jsonl", "a", encoding="utf-8") as file:
+                file.write(f"{jsonl_line}\n")
+            print(jsonl_line)
+
+    for item in extracted_data:
+        print(item)
+
 def print_response(system_message:str, model_prompt:str, result:str):
     response_data = {
         "system_message": system_message,
@@ -177,13 +218,14 @@ def print_response(system_message:str, model_prompt:str, result:str):
     jsonl_line = json.dumps(response_data)
     print(jsonl_line)
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     use_rag = False
     use_files_in_context = True
     process_scenarios = True
 
     if(process_scenarios):
         risk_scenarios = file_operations.get_unique_scenarios_from_csv("Inputs/Scenarios.csv")
+        risk_scenarios = risk_scenarios[136:]
     else:
         risk_scenario = "The CIS System services are managed based on user access rights, identification and assignment of access rights are managed directly by the system users."
         risk_scenarios = [risk_scenario]
@@ -215,3 +257,5 @@ if __name__ == "__main__":
         with open(output_file_path, "a", encoding="utf-8") as file:
             jsonl_line = json.dumps({"risk_scenario": risk_scenario, "result": result})
             file.write(f"{jsonl_line}\n")
+        
+    produce_accuracy_results(analysis_results_file_path=output_file_path, ground_truth_file_path="Inputs/Scenarios.csv")
