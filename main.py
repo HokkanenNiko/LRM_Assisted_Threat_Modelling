@@ -17,7 +17,7 @@ def prompt_model(prompt_text, system_prompt):
         "system": system_prompt,
         "prompt": prompt_text,
         "options": {
-            "num_ctx": 1024 * 8
+            "num_ctx": 1024 * 64
         }
     }
 
@@ -71,6 +71,63 @@ def initialize_vector_database(context):
 
 def format_prompt_text(context, user_query):
     return "Context based on semantic search:\n\n({})\n\nend of context\n\nstart of risk scenario:({})\n\nend of risk scenario".format(context, user_query)
+
+def extract_threat_vulnerability_table():
+    file_path = "Inputs\Risk Analysis TI-0002 ENG[64].xlsx"
+    xls = pd.ExcelFile(file_path)
+
+    # Load the relevant sheet
+    df = pd.read_excel(xls, sheet_name=' Threats-Vulnerabilities-Measur')
+
+    # Extract relevant columns and clean the data
+    df_cleaned = df.iloc[2:].reset_index(drop=True)  # Remove header rows and reset index
+    df_cleaned.columns = ["Threat ID", "Threat", "Vulnerability ID", "Vulnerability", "VTHE", "Countermeasure ID", "Countermeasure", "Technical Nature"]
+
+    # Forward-fill missing values for Threats and Vulnerabilities
+    df_cleaned["Threat ID"].fillna(method="ffill", inplace=True)
+    df_cleaned["Threat"].fillna(method="ffill", inplace=True)
+    df_cleaned["Vulnerability ID"].fillna(method="ffill", inplace=True)
+    df_cleaned["Vulnerability"].fillna(method="ffill", inplace=True)
+
+    # Remove completely empty rows
+    df_cleaned = df_cleaned.dropna(subset=["Countermeasure ID"], how="all")
+
+    # Select only the necessary columns for mapping
+    df_mapping = df_cleaned[["Threat ID", "Vulnerability ID"]]
+    df_mapping = df_mapping.drop_duplicates()
+    
+    # Save to CSV
+    output_mapping_path = "ContextInfo/threat_vulnerability_mapping.csv"
+    df_mapping.to_csv(output_mapping_path, index=False)
+
+
+def extract_threat_vulnerability_mitigations_table():
+    file_path = "Inputs\Risk Analysis TI-0002 ENG[64].xlsx"
+    xls = pd.ExcelFile(file_path)
+
+    # Load the relevant sheet
+    df = pd.read_excel(xls, sheet_name=' Threats-Vulnerabilities-Measur')
+
+    # Extract relevant columns and clean the data
+    df_cleaned = df.iloc[2:].reset_index(drop=True)  # Remove header rows and reset index
+    df_cleaned.columns = ["Threat ID", "Threat", "Vulnerability ID", "Vulnerability", "VTHE", "Countermeasure ID", "Countermeasure", "Technical Nature"]
+
+    # Forward-fill missing values for Threats and Vulnerabilities
+    df_cleaned["Threat ID"].fillna(method="ffill", inplace=True)
+    df_cleaned["Threat"].fillna(method="ffill", inplace=True)
+    df_cleaned["Vulnerability ID"].fillna(method="ffill", inplace=True)
+    df_cleaned["Vulnerability"].fillna(method="ffill", inplace=True)
+
+    # Remove completely empty rows
+    df_cleaned = df_cleaned.dropna(subset=["Countermeasure ID"], how="all")
+
+    # Select only the necessary columns for mapping
+    df_mapping = df_cleaned[["Threat ID", "Vulnerability ID", "Countermeasure ID"]]
+
+    # Save to CSV
+    output_mapping_path = "ContextInfo/threat_vulnerability_mitigation_mapping.csv"
+    df_mapping.to_csv(output_mapping_path, index=False)
+
 
 system_message='''You are an assistant in security risk analysis.
       You need to determine if the current user message contains a security threat.
@@ -206,7 +263,7 @@ def print_response(system_message:str, model_prompt:str, result:str):
 if __name__ == "__main__":    
     use_rag = False
     use_files_in_context = True
-    process_scenarios = True
+    process_scenarios = False
 
     if(use_rag):
         system_prompt = system_message_rag_custom
@@ -216,13 +273,15 @@ if __name__ == "__main__":
         risk_scenarios = file_operations.get_unique_scenarios_from_csv("Inputs/Scenarios.csv")
         risk_scenarios = risk_scenarios[136:]
     else:
-        risk_scenario = "The CIS System services are managed based on user access rights, identification and assignment of access rights are managed directly by the system users."
+        risk_scenario = "There is freedom of access and exit from the premises by vehicles and people. Furthermore, people can oppose any requests for control both for themselves and for the vehicle used to access the premises"
         risk_scenarios = [risk_scenario]
 
     if(use_files_in_context):
+        extract_threat_vulnerability_table()
+        threats_vulnerabilities_mitigations_table = file_operations.read_file_contents("ContextInfo/threat_vulnerability_mapping.csv")
         threats_content = file_operations.read_file_contents("ContextInfo/Threats.csv")
         vulnerabilities_content = file_operations.read_file_contents("ContextInfo/Vulnerabilities.csv")
-        system_prompt = system_message + "\n\nUse the associated threats table for RiskIDs:\n" + threats_content + "\n\nUse the associated vulnerabilities table for VulnIDs:\n" + vulnerabilities_content
+        system_prompt = system_message + "\n\nUse the associated threats table for RiskIDs:\n" + threats_content + "\n\nUse the associated vulnerabilities table for VulnIDs:\n\n" + vulnerabilities_content + "\n\nUse the following table to select possible threat - vulnerability pairing:" + threats_vulnerabilities_mitigations_table + "\n"
     else:
         system_prompt = system_message
         
