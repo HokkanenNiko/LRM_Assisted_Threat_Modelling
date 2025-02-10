@@ -17,37 +17,12 @@ def prompt_model(prompt_text, system_prompt):
         "system": system_prompt,
         "prompt": prompt_text,
         "options": {
-            "num_ctx": 128000
+            "num_ctx": 1024 * 8
         }
     }
 
     response = apiWrapper.post('api/generate', payload)
     return response['response']
-
-def csv_to_chunked_json(csv_file_path: str, output_json_path: str, id_col: str, name_col: str, desc_col: str):
-    """
-    Converts a CSV file to a JSON file with chunked text format.
-    
-    :param csv_file_path: Path to the input CSV file.
-    :param output_json_path: Path to the output JSON file.
-    :param id_col: Column name for the unique identifier.
-    :param name_col: Column name for the item name.
-    :param desc_col: Column name for the description.
-    """
-    try:
-        df = pd.read_csv(csv_file_path, delimiter=';', encoding='utf-8')
-        
-        # Generate chunked text format
-        df["chunk"] = df.apply(
-            lambda row: f"{id_col}: {row[id_col]}\n{name_col}: {row[name_col]}\n{desc_col}: {row[desc_col]}", axis=1
-        )
-        
-        # Convert to JSON and save
-        df[[id_col, "chunk"]].to_json(output_json_path, orient="records", indent=4, force_ascii=False)
-        
-        print(f"Successfully created chunked JSON file at {output_json_path}")
-    except Exception as e:
-        print(f"Error: {e}")
 
 def read_csv_file(file_path: str) -> list[dict]:
     """
@@ -87,7 +62,7 @@ def csv_to_chunked_list(csv_file_path: str, id_col: str, name_col: str, desc_col
         print(f"Error: {e}")
         return []
     
-def fetch_context(context, query: str):
+def fetch_context_from_database(context, query: str):
     results = context.search(query, top_k=5)
     return "\n\n---\n\n".join(result['text'] for result in results)
 
@@ -134,10 +109,10 @@ system_message_rag_custom='''You are an assistant in security risk analysis.
       \"RiskDesc\": \"[Risk Description]\",
       \"VulnID\":	\"[Vulnerability ID]\",
       \"VulnDesc\": \"[Vulnerability Description]\",
-      \"RiskType\": \"[Reale/Potenziale]\",
-      \"HelpfulContext\": \"[HelpfulContext: YES/NO]\"
-      },'''
-
+      \"RiskType\": \"[Real/Potential]\"
+      },
+      NOTE: YOU MUST NEVER INCLUDE MORE THAN ONE RISK OR VULNERABILITY IN A SINGLE JSON ITEM. EACH ITEM MUST BE A SINGLE VULNERABILITY AND RISK MAPPING. PRODUCE MULTIPLE JSON ITEMS IF YOU FIND MULTIPLE VULNERABILITIES!
+      '''
 
 system_message_reformat='''You are an assistant in security risk analysis.
       You need to format the user message as follows
@@ -160,14 +135,28 @@ system_message_reformat='''You are an assistant in security risk analysis.
       \"RiskType\": \"[Reale/Potenziale]\"
       },'''
 
-def initialize_rag_and_fetch_context(risk_scenario):
-    threat_chunks = csv_to_chunked_list("Threats.csv", "THREAT ID", "THREAT", "DESCRIPTION")
-    vulnerability_chunks = csv_to_chunked_list("Vulnerabilities.csv", "ID", "VULNERABILITY", "DESCRIPTION")
+def initialize_rag():
+    threat_chunks = csv_to_chunked_list("ContextInfo/Threats.csv", "THREAT ID", "THREAT", "DESCRIPTION")
+    vulnerability_chunks = csv_to_chunked_list("ContextInfo/Vulnerabilities.csv", "ID", "VULNERABILITY", "DESCRIPTION")
 
     vector_db = vector_search.initialize_vector_database_with_chunks(threat_chunks)
     vector_db = vector_search.add_to_vector_database(vector_db, vulnerability_chunks)
 
-    context = fetch_context(vector_db, risk_scenario)
+    return vector_db
+
+def fetch_context(vector_db, risk_scenario):
+    context = fetch_context_from_database(vector_db, risk_scenario)
+    prompt_text = format_prompt_text(context, risk_scenario)
+    return prompt_text
+
+def initialize_rag_and_fetch_context(risk_scenario):
+    threat_chunks = csv_to_chunked_list("ContextInfo/Threats.csv", "THREAT ID", "THREAT", "DESCRIPTION")
+    vulnerability_chunks = csv_to_chunked_list("ContextInfo/Vulnerabilities.csv", "ID", "VULNERABILITY", "DESCRIPTION")
+
+    vector_db = vector_search.initialize_vector_database_with_chunks(threat_chunks)
+    vector_db = vector_search.add_to_vector_database(vector_db, vulnerability_chunks)
+
+    context = fetch_context_from_database(vector_db, risk_scenario)
     prompt_text = format_prompt_text(context, risk_scenario)
     return prompt_text
 
@@ -204,10 +193,6 @@ def produce_accuracy_results(analysis_results_file_path:str, ground_truth_file_p
             jsonl_line = json.dumps(result)
             with open(f"Outputs/{os.path.splitext(os.path.basename(analysis_results_file_path))[0]}_results.jsonl", "a", encoding="utf-8") as file:
                 file.write(f"{jsonl_line}\n")
-            print(jsonl_line)
-
-    for item in extracted_data:
-        print(item)
 
 def print_response(system_message:str, model_prompt:str, result:str):
     response_data = {
@@ -223,6 +208,10 @@ if __name__ == "__main__":
     use_files_in_context = True
     process_scenarios = True
 
+    if(use_rag):
+        system_prompt = system_message_rag_custom
+        vector_db = initialize_rag()
+
     if(process_scenarios):
         risk_scenarios = file_operations.get_unique_scenarios_from_csv("Inputs/Scenarios.csv")
         risk_scenarios = risk_scenarios[136:]
@@ -237,7 +226,11 @@ if __name__ == "__main__":
     else:
         system_prompt = system_message
         
-    output_file_path = f"Outputs/Results_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+    if use_rag:
+        output_file_path = f"Outputs/Results_RAG_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+    else:
+        output_file_path = f"Outputs/Results_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+
     with open(output_file_path, "a", encoding="utf-8") as file:
         jsonl_line = json.dumps({"system_prompt": system_prompt})
         file.write(f"{jsonl_line}\n")
@@ -246,8 +239,8 @@ if __name__ == "__main__":
         counter += 1
         print(f"Processing scenario {counter}/{len(risk_scenarios)}")
         if(use_rag):
-            system_prompt = system_message_rag_custom
-            risk_scenario = initialize_rag_and_fetch_context(risk_scenario)
+            context = fetch_context(vector_db, risk_scenario)
+            risk_scenario = format_prompt_text(context, risk_scenario)
 
         start_time = time.time()
         result = prompt_model(risk_scenario, system_prompt)
