@@ -4,3 +4,4 @@ faiss-cpu
 sentence-transformers
 pandas
 openpyxl
+matplotlib

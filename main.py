@@ -243,7 +243,7 @@ def produce_accuracy_results(analysis_results_file_path:str, ground_truth_file_p
                 "threat_match": full_match,
                 "vulnerability_match": full_match,
                 "full_match": full_match,
-                "partial_match": False,
+                "partial_match": True,
                 "ground_truth_threat_exists": ground_truth['Assistant - Short'].lower() == "yes"
                 }
             else:    
