@@ -41,6 +41,6 @@ def extract_risk_data(data):
                     "RiskType": risk.get("RiskType", ""),
                 })
         except json.JSONDecodeError as e:
-            print(f"Error decoding JSON for scenario: {risk_scenario} exception:{e}")
+            print(f"Error decoding JSON for entry: {entry} exception:{e}")
             
     return extracted_data

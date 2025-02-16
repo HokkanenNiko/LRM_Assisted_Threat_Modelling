@@ -17,7 +17,8 @@ def prompt_model(prompt_text, system_prompt):
         "system": system_prompt,
         "prompt": prompt_text,
         "options": {
-            "num_ctx": 1024 * 64
+            "num_ctx": 1000 * 128,
+            "temperature": 0
         }
     }
 
@@ -228,24 +229,36 @@ def produce_accuracy_results(analysis_results_file_path:str, ground_truth_file_p
     for ground_truth in ground_truths:
         scenario = ground_truth['Scenario ID']
         llm_analyses = [item for item in extracted_data if item['RiskScenarioShort'] == scenario]
-        print(scenario)
         for analysis in llm_analyses:
             risk_ids = analysis['RiskID'].split(';')
             risk_id = risk_ids[0] if risk_ids else analysis['RiskID']
             vuln_ids = analysis['VulnID'].split(';')
             vuln_id = vuln_ids[0] if vuln_ids else analysis['VulnID']
+            threat_detected:str = analysis['Short']
 
-            threat_match = risk_id == ground_truth['Assistant - Risk ID']
-            vulnerability_match = vuln_id == ground_truth['Assistant - Vulnerability ID']
-            full_match = threat_match and vulnerability_match
-            partial_match = threat_match or vulnerability_match
-            result = {
+            if(threat_detected.lower() == 'no'):
+                full_match = threat_detected.lower() == ground_truth['Assistant - Short'].lower()
+                result = {
                 "scenario_id": scenario,
-                "threat_match": threat_match,
-                "vulnerability_match": vulnerability_match,
+                "threat_match": full_match,
+                "vulnerability_match": full_match,
                 "full_match": full_match,
-                "partial_match": partial_match
-            }
+                "partial_match": False,
+                "ground_truth_threat_exists": ground_truth['Assistant - Short'].lower() == "yes"
+                }
+            else:    
+                threat_match = risk_id == ground_truth['Assistant - Risk ID']
+                vulnerability_match = vuln_id == ground_truth['Assistant - Vulnerability ID']
+                full_match = threat_match and vulnerability_match
+                partial_match = threat_match or vulnerability_match
+                result = {
+                    "scenario_id": scenario,
+                    "threat_match": threat_match,
+                    "vulnerability_match": vulnerability_match,
+                    "full_match": full_match,
+                    "partial_match": partial_match,
+                    "ground_truth_threat_exists": ground_truth['Assistant - Short'].lower() == "yes"
+                }
             results.append(result)
             jsonl_line = json.dumps(result)
             with open(f"Outputs/{os.path.splitext(os.path.basename(analysis_results_file_path))[0]}_results.jsonl", "a", encoding="utf-8") as file:
@@ -263,7 +276,7 @@ def print_response(system_message:str, model_prompt:str, result:str):
 if __name__ == "__main__":    
     use_rag = False
     use_files_in_context = True
-    process_scenarios = False
+    process_scenarios = True
 
     if(use_rag):
         system_prompt = system_message_rag_custom
@@ -273,7 +286,7 @@ if __name__ == "__main__":
         risk_scenarios = file_operations.get_unique_scenarios_from_csv("Inputs/Scenarios.csv")
         risk_scenarios = risk_scenarios[136:]
     else:
-        risk_scenario = "There is freedom of access and exit from the premises by vehicles and people. Furthermore, people can oppose any requests for control both for themselves and for the vehicle used to access the premises"
+        risk_scenario = "S173: All storage media are properly protected to prevent disclosure of information during maintenance work on the CIS System workstations with at-rest encryption based on certified algorithms."
         risk_scenarios = [risk_scenario]
 
     if(use_files_in_context):
