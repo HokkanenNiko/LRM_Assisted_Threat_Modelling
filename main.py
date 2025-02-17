@@ -12,12 +12,12 @@ def prompt_model(prompt_text, system_prompt):
     apiWrapper = ollama_api_wrapper.OllamaAPIWrapper(base_url='http://localhost:11434')
 
     payload = {
-        "model": 'marco-o1:latest',
+        "model": 'deepseek-r1:latest',
         "stream": False,
         "system": system_prompt,
         "prompt": prompt_text,
         "options": {
-            "num_ctx": 1000 * 128,
+            "num_ctx": 1000 * 64,
             "temperature": 0
         }
     }
@@ -237,15 +237,25 @@ def produce_accuracy_results(analysis_results_file_path:str, ground_truth_file_p
             threat_detected:str = analysis['Short']
 
             if(threat_detected.lower() == 'no'):
-                full_match = threat_detected.lower() == ground_truth['Assistant - Short'].lower()
-                result = {
-                "scenario_id": scenario,
-                "threat_match": full_match,
-                "vulnerability_match": full_match,
-                "full_match": full_match,
-                "partial_match": True,
-                "ground_truth_threat_exists": ground_truth['Assistant - Short'].lower() == "yes"
-                }
+                full_match = 'no' == ground_truth['Assistant - Short'].lower()
+                if(full_match):
+                    result = {
+                        "scenario_id": scenario,
+                        "threat_match": True,
+                        "vulnerability_match": True,
+                        "full_match": True,
+                        "partial_match": True,
+                        "ground_truth_threat_exists": False
+                    }
+                else:
+                    result = {
+                        "scenario_id": scenario,
+                        "threat_match": False,
+                        "vulnerability_match": False,
+                        "full_match": False,
+                        "partial_match": False,
+                        "ground_truth_threat_exists": True
+                    }
             else:    
                 threat_match = risk_id == ground_truth['Assistant - Risk ID']
                 vulnerability_match = vuln_id == ground_truth['Assistant - Vulnerability ID']
@@ -257,7 +267,7 @@ def produce_accuracy_results(analysis_results_file_path:str, ground_truth_file_p
                     "vulnerability_match": vulnerability_match,
                     "full_match": full_match,
                     "partial_match": partial_match,
-                    "ground_truth_threat_exists": ground_truth['Assistant - Short'].lower() == "yes"
+                    "ground_truth_threat_exists": ground_truth['Assistant - Short'].lower() != "no"
                 }
             results.append(result)
             jsonl_line = json.dumps(result)
@@ -277,6 +287,12 @@ if __name__ == "__main__":
     use_rag = False
     use_files_in_context = True
     process_scenarios = True
+
+
+    # #####REMOVE#####
+    # output_file_path = f"Outputs\Results_20250216_172532.jsonl"
+    # produce_accuracy_results(analysis_results_file_path=output_file_path, ground_truth_file_path="Inputs/Scenarios.csv")
+    # #####REMOVE#####
 
     if(use_rag):
         system_prompt = system_message_rag_custom
